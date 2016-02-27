@@ -102,8 +102,30 @@ router.get('/addObject',function (req,res,next) {
 router.post('/addObject',function (req,res,next) {
 	var animal = {animal: req.body.animal, nombre:req.body.nombre};
 
-	console.log("Post add object "+animal.animal);
+	db.collection("Animal",function (err,collection) {
+		if (!err) {
+			addObject(collection,animal);
+		}else{
+			console.log("Error con la collection");
+			console.log(err);
+		}
+	})
+	
 	res.redirect('/addObject');
 })
+
+function addObject(collection,object) {
+	collection.insert(object,function (err,result) {
+		if (!err) {
+			console.log("Objeto Insertado");
+			console.log(result);
+		}else{
+			console.log("Error insertando objeto");
+			console.log(err);
+		}
+	})
+}
+
+
 
 module.exports = router;
